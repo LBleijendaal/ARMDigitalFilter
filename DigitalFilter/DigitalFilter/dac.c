@@ -37,7 +37,7 @@ void dac0ch0init(void)
 	DACC->DACC_WPMR |= DACC_WPMR_WPKEY_PASSWD;
 	DACC->DACC_WPMR |= (0x00 << 0);
 	
-	DACC->DACC_MR |= DACC_MR_PRESCALER(0xF)
+	DACC->DACC_MR |= DACC_MR_PRESCALER(0x9)
 	| DACC_MR_DIFF_DISABLED_Val
 	| (0x0 << 5)
 	| DACC_MR_WORD_DISABLED
@@ -55,9 +55,9 @@ void dac0ch0init(void)
 	
 
 	
-//	NVIC_ClearPendingIRQ(DACC_IRQn);
-//	NVIC_SetPriority(DACC_IRQn, 1);
-//	NVIC_EnableIRQ(DACC_IRQn);
+	NVIC_ClearPendingIRQ(DACC_IRQn);
+	NVIC_SetPriority(DACC_IRQn, 1);
+	NVIC_EnableIRQ(DACC_IRQn);
 	
 	
 	
@@ -65,11 +65,13 @@ void dac0ch0init(void)
 	
 	DACC->DACC_CHER = DACC_CHER_CH0_Msk;
 	
-	while((daccStatus & DACC_CHSR_DACRDY0_Msk) == 0) daccStatus = DACC->DACC_CHSR;
+	while((daccStatus & DACC_CHSR_DACRDY0_Msk) == 0) {
+		daccStatus = DACC->DACC_CHSR;
+	}
 	
-	DACC->DACC_CDR[0] = (0x0000 << 0x00);        
+	DACC->DACC_CDR[0] = (0x0011 << 0x00);        
 	
-//	DACC->DACC_IER = DACC_IER_EOC0_Msk; 	
+	DACC->DACC_IER |= DACC_IER_TXRDY0_Msk | DACC_IER_EOC0_Msk; 	
 	
 	
 }

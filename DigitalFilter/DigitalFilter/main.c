@@ -51,8 +51,9 @@ void DACC_Handler(void) {
 	
 	
 	uint32_t status = DACC->DACC_ISR;
-	if((status & DACC_ISR_EOC0_Msk) == 1) {
-		
+	//uint32_t status2 = DACC->DACC_CHSR;
+	if(((status & DACC_ISR_TXRDY0_Msk) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256) {
+		DACC->DACC_CDR[0] = DACC_CDR_DATA0(1000);  
 	}     	
 }
 
