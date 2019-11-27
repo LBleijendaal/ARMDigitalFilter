@@ -17,6 +17,11 @@
 uint32_t tmp;
 uint32_t boolean = 0;
 
+static volatile uint32_t data = 1024;
+static volatile uint32_t updated;
+
+void fillFIFO(void);
+
 int main(void)
 {
     /* Initialize the SAM system */
@@ -31,8 +36,26 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
+		if(((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk) == 1) {
+			fillFIFO();
+		}	
+	}
+
+		
+		
 			
-    }
+    
+}
+
+void fillFIFO(void) 
+{
+	for(int i = 0; i < 5; i++) {
+		DACC->DACC_CDR[0] = DACC_CDR_DATA0(data);
+	}
+	
+	if(1) {
+		data = 1000;
+	}
 }
 
 void AFEC0_Handler(void)
@@ -50,10 +73,10 @@ void AFEC0_Handler(void)
 void DACC_Handler(void) {
 	
 	
-	uint32_t status = DACC->DACC_ISR;
+	//uint32_t status = ;
 	//uint32_t status2 = DACC->DACC_CHSR;
-	if(((status & DACC_ISR_TXRDY0_Msk) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256) {
-		DACC->DACC_CDR[0] = DACC_CDR_DATA0(1000);  
+	if( ((((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk)) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256 ) {
+		//fillFIFO();
 	}     	
 }
 
