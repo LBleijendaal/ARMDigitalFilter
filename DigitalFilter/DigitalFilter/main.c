@@ -41,27 +41,33 @@ int main(void)
 }
 void AFEC0_Handler(void)
 {
-	PIOC->PIO_SODR |= PIO_PC8;
+	
 	uint32_t status = AFEC0->AFEC_ISR;
+	
+	PIOC->PIO_SODR |= PIO_PC8;
+	
 	if((status & AFEC_IMR_EOC0) == 1) {
-		PIOC->PIO_CODR |= PIO_PC8;
+		
 		tmp = AFEC0->AFEC_CDR;
 		boolean = 1;
 		
-		if( ((((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk)) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256 ) {
+		if( ((((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk)) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256 ) 
+		{
 			DACC->DACC_CDR[0] = DACC_CDR_DATA0(tmp);
+			PIOC->PIO_SODR |= PIO_PC8;
 		}
+		
+		if(((DACC->DACC_ISR) & (0x01)) == 0) 
+		{
+			PIOC->PIO_CODR |= PIO_PC8;
+		}
+		
 	}
+	
 	AFEC0->AFEC_CR = AFEC_CR_START;
 }
 
 void DACC_Handler(void) {
-	
-	
-	//uint32_t status = ;
-	//uint32_t status2 = DACC->DACC_CHSR;
-	
-		//fillFIFO();
-	
+
 }
 
