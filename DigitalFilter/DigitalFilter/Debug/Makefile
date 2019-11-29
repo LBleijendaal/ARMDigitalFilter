@@ -43,6 +43,7 @@ C_SRCS +=  \
 ../dac.c \
 ../Device_Startup/startup_same70q21b.c \
 ../Device_Startup/system_same70q21b.c \
+../fir.c \
 ../main.c \
 ../pmc.c
 
@@ -59,6 +60,7 @@ board.o \
 dac.o \
 Device_Startup/startup_same70q21b.o \
 Device_Startup/system_same70q21b.o \
+fir.o \
 main.o \
 pmc.o
 
@@ -68,6 +70,7 @@ board.o \
 dac.o \
 Device_Startup/startup_same70q21b.o \
 Device_Startup/system_same70q21b.o \
+fir.o \
 main.o \
 pmc.o
 
@@ -77,6 +80,7 @@ board.d \
 dac.d \
 Device_Startup/startup_same70q21b.d \
 Device_Startup/system_same70q21b.d \
+fir.d \
 main.d \
 pmc.d
 
@@ -86,6 +90,7 @@ board.d \
 dac.d \
 Device_Startup/startup_same70q21b.d \
 Device_Startup/system_same70q21b.d \
+fir.d \
 main.d \
 pmc.d
 
@@ -134,6 +139,13 @@ Device_Startup/startup_same70q21b.o: ../Device_Startup/startup_same70q21b.c
 	
 
 Device_Startup/system_same70q21b.o: ../Device_Startup/system_same70q21b.c
+	@echo Building file: $<
+	@echo Invoking: ARM/GNU C Compiler : 6.3.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAME70Q21B__ -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\arm\CMSIS\5.4.0\CMSIS\Core\Include" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\SAME70_DFP\2.4.166\same70b\include"  -O1 -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m7 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./fir.o: .././fir.c
 	@echo Building file: $<
 	@echo Invoking: ARM/GNU C Compiler : 6.3.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAME70Q21B__ -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\arm\CMSIS\5.4.0\CMSIS\Core\Include" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\SAME70_DFP\2.4.166\same70b\include"  -O1 -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m7 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

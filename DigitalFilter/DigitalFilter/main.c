@@ -7,14 +7,18 @@
 
 #include <stdio.h>
 #include <inttypes.h>
+#include <float.h>
 
 #include "sam.h"
 #include "board.h"
 #include "pmc.h"
 #include "afec.h"
 #include "dac.h"
+#include "fpu.h"
+#include "fir.h"
 
-uint32_t tmp;
+float tmp;
+
 uint32_t boolean = 0;
 
 static volatile uint32_t data = 1024;
@@ -30,40 +34,36 @@ int main(void)
 	board_init();
 	afec0ch0_init(0x3);
 	dac0ch0init();
-	
-	//dac();
+	fpu_enable();
 	
     /* Replace with your application code */
     while (1) 
     {
-		
+		asm volatile ("nop");
 	}	
 }
 void AFEC0_Handler(void)
 {
-	
 	uint32_t status = AFEC0->AFEC_ISR;
 	
-	PIOC->PIO_SODR |= PIO_PC8;
-	
 	if((status & AFEC_IMR_EOC0) == 1) {
-		
+	
 		tmp = AFEC0->AFEC_CDR;
-		boolean = 1;
 		
+		//tmp = firFilter((float)AFEC0->AFEC_CDR);
+	
 		if( ((((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk)) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256 ) 
 		{
-			DACC->DACC_CDR[0] = DACC_CDR_DATA0(tmp);
-			PIOC->PIO_SODR |= PIO_PC8;
+			DACC->DACC_CDR[0] = DACC_CDR_DATA0((uint32_t)tmp);
+			
 		}
 		
 		if(((DACC->DACC_ISR) & (0x01)) == 0) 
 		{
-			PIOC->PIO_CODR |= PIO_PC8;
+			
 		}
 		
 	}
-	
 	AFEC0->AFEC_CR = AFEC_CR_START;
 }
 

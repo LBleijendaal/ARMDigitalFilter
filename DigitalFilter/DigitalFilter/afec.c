@@ -34,8 +34,11 @@ void afec0ch0_init(uint32_t prescaler)
 	
 	AFEC0->AFEC_ACR = AFEC_ACR_IBCTL(0x03) | AFEC_ACR_PGA0EN | AFEC_ACR_PGA1EN;
 	
-	AFEC0->AFEC_MR |= AFEC_MR_FREERUN_ON;								// Trigger TIOA Output of the Timer Counter Channel 0 for AFEC0
-	//AFEC0->AFEC_MR |= AFEC_MR_TRGEN;											// Enable Hardware Trigger
+	AFEC0->AFEC_MR |= AFEC_MR_FREERUN_ON;								
+	
+	
+	//AFEC0->AFEC_MR |= AFEC_MR_TRGSEL_AFEC_TRIG1;						// Trigger TIOA Output of the Timer Counter Channel 0 for AFEC0
+	//AFEC0->AFEC_MR |= AFEC_MR_TRGEN;									// Enable Hardware Trigger
 	/*
 	 * The field AOFF must be configured to 512 (mid scale of the DAC) when there is no offset error to
 	 * compensate.
@@ -54,3 +57,6 @@ void afec0ch0_init(uint32_t prescaler)
 	/* Enable Channel 0 for AFEC0 */
 	AFEC0->AFEC_CHER = AFEC_CHER_CH0;
 }
+
+
+
