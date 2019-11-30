@@ -185,6 +185,12 @@
     <Compile Include="pmc.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="tim.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="tim.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="tmwtypes.h">
       <SubType>compile</SubType>
     </Compile>

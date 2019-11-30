@@ -16,6 +16,7 @@
 #include "dac.h"
 #include "fpu.h"
 #include "fir.h"
+#include "tim.h"
 
 float tmp;
 
@@ -23,6 +24,8 @@ uint32_t boolean = 0;
 
 static volatile uint32_t data = 1024;
 static volatile uint32_t updated;
+
+static volatile uint32_t triggered;
 
 void fillFIFO(void);
 
@@ -32,9 +35,13 @@ int main(void)
     SystemInit();
 	sysclk_init();
 	board_init();
+	initTimer();
+	
+	
 	afec0ch0_init(0x3);
 	dac0ch0init();
-	fpu_enable();
+	//fpu_enable();
+
 	
     /* Replace with your application code */
     while (1) 
@@ -62,10 +69,22 @@ void AFEC0_Handler(void)
 		{
 			
 		}
-		
 	}
-	AFEC0->AFEC_CR = AFEC_CR_START;
+	
 }
+
+void TC0_Handler(void) {
+	
+	uint32_t status = REG_TC0_SR0;
+	
+	if((status & TC_SR_CPCS) >= 1) {
+		AFEC0->AFEC_CR = AFEC_CR_START;
+		PIOC->PIO_CODR |= PIO_PC8;
+	}
+	PIOC->PIO_SODR |= PIO_PC8;
+}
+
+
 
 void DACC_Handler(void) {
 
