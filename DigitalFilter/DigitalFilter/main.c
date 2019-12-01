@@ -18,8 +18,12 @@
 #include "fir.h"
 #include "tim.h"
 
-float tmp;
-float tmp2;
+
+static volatile float tmp;
+static volatile float tmp2;
+
+static volatile uint32_t pingpong[2];
+static volatile uint32_t ping = 0;
 
 uint32_t boolean = 0;
 
@@ -47,7 +51,14 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
-		asm volatile ("nop");
+		//if((updated == 1) && (triggered == 0)) {
+			tmp2 = firFilter(tmp);
+			triggered = 1;
+			
+			if(tmp2 > 5000) {
+				break;
+			}
+	//	}
 	}	
 }
 void AFEC0_Handler(void)
@@ -56,24 +67,15 @@ void AFEC0_Handler(void)
 	
 	if((status & AFEC_IMR_EOC0) == 1) {
 		
-		
 		tmp = AFEC0->AFEC_CDR;
-		
-		tmp2 = firFilter(tmp);
-		
-		updated = 1;
-		
-		PIOC->PIO_CODR |= PIO_PC8;
-		
-		//tmp = firFilter((float)AFEC0->AFEC_CDR);
 	
-		if( ((((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk)) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256 ) 
-		{
-			DACC->DACC_CDR[0] = DACC_CDR_DATA0((uint32_t)tmp);
-			
-		}
-	}
-	PIOC->PIO_SODR |= PIO_PC8;
+		updated = 1;
+		triggered = 0;
+		
+		//PIOC->PIO_CODR |= PIO_PC8;
+		
+		//PIOC->PIO_SODR |= PIO_PC8;
+	}		
 }
 
 void TC0_Handler(void) {
@@ -83,11 +85,20 @@ void TC0_Handler(void) {
 	if((statusT & TC_SR_CPCS) >= 1) {
 		
 		if(updated) {
-			AFEC0->AFEC_CR = AFEC_CR_START;
+			
+			//tmp2 = firFilter(tmp);
+			
+			AFEC0->AFEC_CR = AFEC_CR_START;			
 			updated = 0;
-			//PIOC->PIO_CODR |= PIO_PC8;
+		}
+		if( ((((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk)) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256 )
+		{
+			DACC->DACC_CDR[0] = DACC_CDR_DATA0((uint32_t)tmp2);
+			
+				
 		}
 	}
+	
 	//PIOC->PIO_SODR |= PIO_PC8;
 }
 
