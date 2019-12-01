@@ -19,6 +19,7 @@
 #include "tim.h"
 
 float tmp;
+float tmp2;
 
 uint32_t boolean = 0;
 
@@ -54,10 +55,15 @@ void AFEC0_Handler(void)
 	uint32_t status = AFEC0->AFEC_ISR;
 	
 	if((status & AFEC_IMR_EOC0) == 1) {
-	
+		
+		
 		tmp = AFEC0->AFEC_CDR;
 		
+		tmp2 = firFilter(tmp);
+		
 		updated = 1;
+		
+		PIOC->PIO_CODR |= PIO_PC8;
 		
 		//tmp = firFilter((float)AFEC0->AFEC_CDR);
 	
@@ -66,12 +72,8 @@ void AFEC0_Handler(void)
 			DACC->DACC_CDR[0] = DACC_CDR_DATA0((uint32_t)tmp);
 			
 		}
-		
-		if(((DACC->DACC_ISR) & (0x01)) == 0) 
-		{
-			
-		}
 	}
+	PIOC->PIO_SODR |= PIO_PC8;
 }
 
 void TC0_Handler(void) {
@@ -83,10 +85,10 @@ void TC0_Handler(void) {
 		if(updated) {
 			AFEC0->AFEC_CR = AFEC_CR_START;
 			updated = 0;
-			PIOC->PIO_CODR |= PIO_PC8;
+			//PIOC->PIO_CODR |= PIO_PC8;
 		}
 	}
-	PIOC->PIO_SODR |= PIO_PC8;
+	//PIOC->PIO_SODR |= PIO_PC8;
 }
 
 
