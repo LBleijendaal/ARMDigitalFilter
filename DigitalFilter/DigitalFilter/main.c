@@ -57,6 +57,8 @@ void AFEC0_Handler(void)
 	
 		tmp = AFEC0->AFEC_CDR;
 		
+		updated = 1;
+		
 		//tmp = firFilter((float)AFEC0->AFEC_CDR);
 	
 		if( ((((DACC->DACC_ISR) & DACC_ISR_TXRDY0_Msk)) == 1) && ((DACC -> DACC_CHSR) & (0x1u << 8)) == 256 ) 
@@ -70,16 +72,19 @@ void AFEC0_Handler(void)
 			
 		}
 	}
-	
 }
 
 void TC0_Handler(void) {
 	
-	uint32_t status = REG_TC0_SR0;
-	
-	if((status & TC_SR_CPCS) >= 1) {
-		AFEC0->AFEC_CR = AFEC_CR_START;
-		PIOC->PIO_CODR |= PIO_PC8;
+	uint32_t statusT = REG_TC0_SR0;
+		
+	if((statusT & TC_SR_CPCS) >= 1) {
+		
+		if(updated) {
+			AFEC0->AFEC_CR = AFEC_CR_START;
+			updated = 0;
+			PIOC->PIO_CODR |= PIO_PC8;
+		}
 	}
 	PIOC->PIO_SODR |= PIO_PC8;
 }
