@@ -17,8 +17,8 @@
 //F stop: 3500 Hz
 //Fs    : 100 kHz
 
-const uint32_t N_coefficients91 = 101;
-const float coefficients91[101] = {
+uint32_t N_coefficients = 101;
+float coefficients[101] = {
 	4.343378896e-05,-7.904508675e-05,-9.481221787e-05,-0.0001066057157,-8.424618136e-05,
 	-1.097615768e-05,0.0001118352957,0.0002600884181,0.0003878968419,0.0004368193331,
 	0.0003531037655,0.0001094000982,-0.0002754924935,-0.000726615428,-0.001119173132,
@@ -42,16 +42,14 @@ const float coefficients91[101] = {
 	4.343378896e-05
 };
 
-
-
-
-static float buffer91[101];
+float buffer[101];
 
 
 //F pass: 200 Hz
 //F stop: 4150 Hz
 //Fs    : 100 kHz
 
+/*
 const uint32_t N_coefficients = 51;
 const float coefficients[51] = {
 	0.0001654817769905, 0.002890976162645,  0.00226828575227, 0.003228241791065,
@@ -70,9 +68,10 @@ const float coefficients[51] = {
 };
 
 static float buffer[51];
+*/
 static uint32_t offset;
 
-
+/*
 float firFilter(float input)
 {
 	double output;
@@ -88,16 +87,15 @@ float firFilter(float input)
 	
 	}
 	
-			PIOC->PIO_CODR |= PIO_PC8;
-			
-			PIOC->PIO_SODR |= PIO_PC8;
 
 	
 	return output;
 }
+*/
+
+//float *coeff = coefficients;
 
 
-/*
 float firFilter(float input) 
 {
 	float *coeff = coefficients;
@@ -126,7 +124,11 @@ float firFilter(float input)
 		offset = 0;
 	}
 	
+	
+	//PIOC->PIO_CODR |= PIO_PC8;
+	
+	//PIOC->PIO_SODR |= PIO_PC8;
+	
 	return output;
 	
 }
-*/

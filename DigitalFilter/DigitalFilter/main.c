@@ -45,20 +45,23 @@ int main(void)
 	
 	afec0ch0_init(0x3);
 	dac0ch0init();
-	//fpu_enable();
+	fpu_enable();
 
 	
     /* Replace with your application code */
     while (1) 
     {
-		//if((updated == 1) && (triggered == 0)) {
+		if(updated && !triggered) {
+			
+			
 			tmp2 = firFilter(tmp);
 			triggered = 1;
 			
-			if(tmp2 > 5000) {
-				break;
-			}
-	//	}
+			PIOC->PIO_CODR |= PIO_PC8;
+			
+			PIOC->PIO_SODR |= PIO_PC8;
+			
+		}
 	}	
 }
 void AFEC0_Handler(void)
