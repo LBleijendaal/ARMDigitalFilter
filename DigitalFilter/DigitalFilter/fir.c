@@ -13,6 +13,8 @@
 
 #include "sam.h"
 
+//#include "fircoefficients.h"
+
 //Fpass: 5600	Hz
 //Fatt : 6600	Hz
 //Fs : 100		kHz
@@ -147,6 +149,7 @@ float coefficients[254] = {
 };
 */
 
+/*
 float coefficients[254] = {
 	-5.451592300996e-05,0.0002415186238531,6.863492113389e-05,-8.608022249657e-05,
 	-2.778463020947e-05,0.0001151740396858,2.321769744998e-05,-0.0001377268352908,
@@ -214,14 +217,14 @@ float coefficients[254] = {
 	0.0002415186238531,-5.451592300996e-05
 };
 
-
+*/
 
 
 
 
 static uint32_t offset;
 
-float firFilter(float input) 
+float firFilter(float input, float *coefficients) 
 {
 	//PIOC->PIO_CODR |= PIO_PC8;
 	

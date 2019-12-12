@@ -6,8 +6,10 @@
  */ 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <inttypes.h>
 #include <float.h>
+#include <string.h>
 
 #include "sam.h"
 #include "board.h"
@@ -17,7 +19,8 @@
 #include "fpu.h"
 #include "fir.h"
 #include "tim.h"
-
+#include "usart.h"
+#include "fircoefficients.h"
 
 static volatile float tmp;
 static volatile float tmp2;
@@ -33,6 +36,26 @@ int main(void)
 	board_init();
 	initTimer();
 	
+
+	USARTinit();
+	printf("Fir Filter Firing Up! \r\n");
+	
+	char c[10];
+	
+	char* huhu = "a";
+	
+	while(1) {
+		
+		if(CanRead_Ctrl()) {
+			c[0] = ReadByte_Ctrl();
+			
+			if(strcmp(c, "a") == 0) {
+				break;
+			}
+		}
+	}
+	
+	printf("Continue...\r\n");
 	
 	afec0ch0_init(0x3);
 	dac0ch0init();
@@ -45,7 +68,7 @@ int main(void)
 		if(updated && !triggered) {
 			
 			
-			tmp2 = firFilter(tmp);
+			tmp2 = firFilter(tmp, &firLookup2);
 			triggered = 1;
 			
 			PIOC->PIO_CODR |= PIO_PC8;

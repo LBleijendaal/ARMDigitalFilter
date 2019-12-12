@@ -9,7 +9,7 @@
 #ifndef FIR_H_
 #define FIR_H_
 
-float firFilter(float input);
+float firFilter(float input, float *coefficients);
 
 
 

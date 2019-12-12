@@ -18,5 +18,9 @@ main.c
 
 pmc.c
 
+syscalls.c
+
 tim.c
+
+usart.c
 
