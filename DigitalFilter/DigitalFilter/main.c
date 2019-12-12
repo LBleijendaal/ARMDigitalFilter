@@ -22,17 +22,8 @@
 static volatile float tmp;
 static volatile float tmp2;
 
-static volatile uint32_t pingpong[2];
-static volatile uint32_t ping = 0;
-
-uint32_t boolean = 0;
-
-static volatile uint32_t data = 1024;
 static volatile uint32_t updated;
-
 static volatile uint32_t triggered;
-
-void fillFIFO(void);
 
 int main(void)
 {

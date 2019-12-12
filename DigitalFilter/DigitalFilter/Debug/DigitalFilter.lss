@@ -5,41 +5,41 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .text         000009f0  00400000  00400000  00010000  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .relocate     000005cc  20400000  004009f0  00020000  2**3
+  1 .relocate     0000082c  20400000  004009f0  00020000  2**3
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          000001f8  204005cc  00400fbc  000205cc  2**2
+  2 .bss          0000044c  2040082c  0040121c  0002082c  2**2
                   ALLOC
-  3 .heap         00000204  204007c4  004011b4  000205cc  2**0
+  3 .heap         00000200  20400c78  00401668  0002082c  2**0
                   ALLOC
-  4 .stack        00000400  204009c8  004013b8  000205cc  2**0
+  4 .stack        00000400  20400e78  00401868  0002082c  2**0
                   ALLOC
-  5 .ARM.attributes 00000030  00000000  00000000  000205cc  2**0
+  5 .ARM.attributes 00000030  00000000  00000000  0002082c  2**0
                   CONTENTS, READONLY
-  6 .comment      00000059  00000000  00000000  000205fc  2**0
+  6 .comment      00000059  00000000  00000000  0002085c  2**0
                   CONTENTS, READONLY
-  7 .debug_info   00008cd5  00000000  00000000  00020655  2**0
+  7 .debug_info   00008c90  00000000  00000000  000208b5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 000010c2  00000000  00000000  0002932a  2**0
+  8 .debug_abbrev 000010b1  00000000  00000000  00029545  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    000004e2  00000000  00000000  0002a3ec  2**0
+  9 .debug_loc    000004e2  00000000  00000000  0002a5f6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_aranges 00000160  00000000  00000000  0002a8ce  2**0
+ 10 .debug_aranges 00000160  00000000  00000000  0002aad8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 000000d0  00000000  00000000  0002aa2e  2**0
+ 11 .debug_ranges 000000d0  00000000  00000000  0002ac38  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_macro  00037c04  00000000  00000000  0002aafe  2**0
+ 12 .debug_macro  00037c04  00000000  00000000  0002ad08  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_line   00005843  00000000  00000000  00062702  2**0
+ 13 .debug_line   00005840  00000000  00000000  0006290c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    0013243f  00000000  00000000  00067f45  2**0
+ 14 .debug_str    0013242e  00000000  00000000  0006814c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_frame  000003b4  00000000  00000000  0019a384  2**2
+ 15 .debug_frame  000003b4  00000000  00000000  0019a57c  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00400000 <exception_table>:
-  400000:	c8 0d 40 20 ad 04 40 00 a9 04 40 00 a9 04 40 00     ..@ ..@...@...@.
+  400000:	78 12 40 20 ad 04 40 00 a9 04 40 00 a9 04 40 00     x.@ ..@...@...@.
   400010:	a9 04 40 00 a9 04 40 00 a9 04 40 00 00 00 00 00     ..@...@...@.....
 	...
   40002c:	a9 04 40 00 a9 04 40 00 00 00 00 00 a9 04 40 00     ..@...@.......@.
@@ -75,7 +75,7 @@ Disassembly of section .text:
   40017a:	2301      	movs	r3, #1
   40017c:	7023      	strb	r3, [r4, #0]
   40017e:	bd10      	pop	{r4, pc}
-  400180:	204005cc 	.word	0x204005cc
+  400180:	2040082c 	.word	0x2040082c
   400184:	00000000 	.word	0x00000000
   400188:	004009f0 	.word	0x004009f0
 
@@ -106,7 +106,7 @@ Disassembly of section .text:
   4001be:	bf00      	nop
   4001c0:	00000000 	.word	0x00000000
   4001c4:	004009f0 	.word	0x004009f0
-  4001c8:	204005d0 	.word	0x204005d0
+  4001c8:	20400830 	.word	0x20400830
   4001cc:	004009f0 	.word	0x004009f0
   4001d0:	00000000 	.word	0x00000000
 
@@ -628,9 +628,9 @@ void Dummy_Handler(void)
   40050a:	bf00      	nop
   40050c:	20400000 	.word	0x20400000
   400510:	004009f0 	.word	0x004009f0
-  400514:	204005cc 	.word	0x204005cc
-  400518:	204007c4 	.word	0x204007c4
-  40051c:	204005cc 	.word	0x204005cc
+  400514:	2040082c 	.word	0x2040082c
+  400518:	20400c78 	.word	0x20400c78
+  40051c:	2040082c 	.word	0x2040082c
   400520:	e000ed00 	.word	0xe000ed00
   400524:	00400000 	.word	0x00400000
   400528:	00400859 	.word	0x00400859
@@ -652,16 +652,18 @@ void SystemInit(void)
 
 00400540 <firFilter>:
 
-//float *coeff = coefficients;
 
+static uint32_t offset;
 
 float firFilter(float input) 
 {
   400540:	b4f0      	push	{r4, r5, r6, r7}
+	//PIOC->PIO_CODR |= PIO_PC8;
+	
 	float *coeff = coefficients;
 	float *coeff_end = coefficients + N_coefficients;
   400542:	4d1f      	ldr	r5, [pc, #124]	; (4005c0 <firFilter+0x80>)
-  400544:	f8d5 7194 	ldr.w	r7, [r5, #404]	; 0x194
+  400544:	f8d5 73f8 	ldr.w	r7, [r5, #1016]	; 0x3f8
   400548:	00b9      	lsls	r1, r7, #2
   40054a:	440d      	add	r5, r1
 	
@@ -743,15 +745,15 @@ float firFilter(float input)
   4005bc:	601e      	str	r6, [r3, #0]
   4005be:	e7f6      	b.n	4005ae <firFilter+0x6e>
   4005c0:	20400004 	.word	0x20400004
-  4005c4:	204005e8 	.word	0x204005e8
-  4005c8:	2040060c 	.word	0x2040060c
+  4005c4:	20400848 	.word	0x20400848
+  4005c8:	2040085c 	.word	0x2040085c
   4005cc:	00000000 	.word	0x00000000
   4005d0:	20400008 	.word	0x20400008
 
 004005d4 <main>:
-static volatile uint32_t triggered;
 
-void fillFIFO(void);
+static volatile uint32_t updated;
+static volatile uint32_t triggered;
 
 int main(void)
 {
@@ -838,7 +840,7 @@ static inline void fpu_enable(void)
   400648:	004001d5 	.word	0x004001d5
   40064c:	00400441 	.word	0x00400441
   400650:	e000ed00 	.word	0xe000ed00
-  400654:	204005ec 	.word	0x204005ec
+  400654:	2040084c 	.word	0x2040084c
   400658:	400e1200 	.word	0x400e1200
   40065c:	00400541 	.word	0x00400541
 
@@ -871,7 +873,7 @@ void AFEC0_Handler(void)
   400680:	605a      	str	r2, [r3, #4]
   400682:	4770      	bx	lr
   400684:	4003c000 	.word	0x4003c000
-  400688:	204005ec 	.word	0x204005ec
+  400688:	2040084c 	.word	0x2040084c
 
 0040068c <TC0_Handler>:
 	}		
@@ -932,7 +934,7 @@ void TC0_Handler(void) {
   4006d4:	b002      	add	sp, #8
   4006d6:	4770      	bx	lr
   4006d8:	4000c020 	.word	0x4000c020
-  4006dc:	204005ec 	.word	0x204005ec
+  4006dc:	2040084c 	.word	0x2040084c
   4006e0:	4003c000 	.word	0x4003c000
   4006e4:	40040000 	.word	0x40040000
 
@@ -1330,12 +1332,12 @@ uint32_t sysclk_init()
   4009b2:	f04f 30ff 	mov.w	r0, #4294967295
   4009b6:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
   4009ba:	bf00      	nop
-  4009bc:	204005c8 	.word	0x204005c8
+  4009bc:	20400828 	.word	0x20400828
   4009c0:	004009c8 	.word	0x004009c8
   4009c4:	00000000 	.word	0x00000000
 
 004009c8 <_global_impure_ptr>:
-  4009c8:	204001a0                                ..@ 
+  4009c8:	20400400                                ..@ 
 
 004009cc <_init>:
   4009cc:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
